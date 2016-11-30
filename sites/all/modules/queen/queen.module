@@ -1,0 +1,104 @@
+<?php
+function queen_menu() {
+    $items['queen'] = array(
+        'title' => 'Queen Attack',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('queen_form'),
+        'access callback' => TRUE,
+        'type' => MENU_NORMAL_ITEM,
+    );
+
+    $items['queen_success_page'] = array(
+        'title' => 'Success',
+        'page callback' => 'queen_success',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+    );
+
+    return $items;
+}
+
+function queen_form() {
+    $path = drupal_get_path('module', 'queen');
+
+    $form['board_image'] = array(
+        '#markup' => '<img src='. $path . '/board2.gif>',
+    );
+
+    $form['queen_position'] = array(
+            '#title' => 'Coordinate for Queen',
+            '#type' => 'textfield',
+            '#description' => t("Choose the location of the queen."),
+    );
+
+    $form['victim_position'] = array(
+            '#title' => 'Coordinate for victim piece',
+            '#type' => 'textfield',
+            '#description' => t("Choose the location of the queen's victim."),
+    );
+
+    $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => 'Go',
+    );
+
+    return $form;
+}
+
+function queen_form_submit($form, &$form_state) {
+    $queen_position = intval($form_state['values']['queen_position']);
+    $victim_position = intval($form_state['values']['victim_position']);
+
+    $difference = $queen_position - $victim_position;
+    $diagonal_death = false;
+    $horizontal_death = false;
+    $vertical_death = false;
+    $victim_dead = false;
+
+    if ($difference % 8 === 0) {
+        $vertical_death = true;
+    }
+    elseif ($difference % 7 === 0 || $difference % 9 === 0 ) {
+        $diagonal_death = true;
+    }
+    elseif (
+        ($queen_position >= 1 && $queen_position <= 8 && $victim_position >= 1 && $victim_position <= 8)
+        ||
+        ($queen_position >= 9 && $queen_position <= 16 && $victim_position >= 9 && $victim_position <= 16)
+        ||
+        ($queen_position >= 17 && $queen_position <= 24 && $victim_position >= 17 && $victim_position <= 24)
+        ||
+        ($queen_position >= 25 && $queen_position <= 32 && $victim_position >= 25 && $victim_position <= 32)
+        ||
+        ($queen_position >= 33 && $queen_position <= 40 && $victim_position >= 33 && $victim_position <= 40)
+        ||
+        ($queen_position >= 41 && $queen_position <= 48 && $victim_position >= 41 && $victim_position <= 48)
+        ||
+        ($queen_position >= 49 && $queen_position <= 56 && $victim_position >= 49 && $victim_position <= 56)
+        ||
+        ($queen_position >= 57 && $queen_position <= 64 && $victim_position >= 57 && $victim_position <= 64)
+    ) {
+        $horizontal_death = true;
+    }
+
+    if ($horizontal_death || $vertical_death || $diagonal_death) {
+        $victim_dead = true;
+    }
+
+    $_SESSION['victim_dead'] = $victim_dead;
+    $form_state['redirect'] = 'queen_success_page';
+}
+function queen_success(){
+    $death = $_SESSION['victim_dead'];
+    $message = "";
+
+    if ($death) {
+        $message = "The Victim Piece was within the Queen's path! The Queen prevails!";
+    }
+
+    else {
+        $message = "The Victim Piece was not within reach of the Queen! It lives another day!";
+    }
+
+    return "<p>$message</p>";
+}

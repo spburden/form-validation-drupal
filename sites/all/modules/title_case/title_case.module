@@ -1,0 +1,55 @@
+<?php
+function title_case_menu() {
+    $items['title_case'] = array(
+        'title' => 'Title Case',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('title_case_form'),
+        'access callback' => TRUE,
+        'type' => MENU_NORMAL_ITEM,
+    );
+
+    $items['title_case_success_page'] = array(
+        'title' => 'Success',
+        'page callback' => 'title_case_success',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+    );
+
+    return $items;
+}
+
+function title_case_form() {
+    $form['string_to_upper'] = array(
+        '#title' => 'String to title case',
+        '#type' => 'textfield',
+        '#description' => t('Please enter a string to convert to title case.'),
+    );
+
+    $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => 'Convert',
+    );
+
+    return $form;
+}
+
+function title_case_form_submit($form, &$form_state) {
+    $text_to_title_case = $form_state['values']['string_to_upper'];
+    $titlecase_output = array();
+
+    $holder_array = explode(" ", $text_to_title_case);
+    foreach($holder_array as $word) {
+        array_push($titlecase_output, ucfirst($word));
+    }
+
+    $return_string = implode(" ", $titlecase_output);
+
+
+    $_SESSION['return_string'] = $return_string;
+    $form_state['redirect'] = 'title_case_success_page';
+}
+
+function title_case_success() {
+    $output = $_SESSION['return_string'];
+    return $output;
+}

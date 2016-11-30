@@ -1,0 +1,5 @@
+name = Queen
+description = Chess queen attack option calculator
+package = Epicodus Examples
+core = 7.x
+files[] = queen_attack.module

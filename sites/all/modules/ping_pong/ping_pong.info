@@ -1,0 +1,5 @@
+name = Ping Pong
+description = It's ping pong again! In a module!
+package = Epicodus Examples
+core = 7.x
+files[] = ping_pong.module

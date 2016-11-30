@@ -1,0 +1,5 @@
+name = Title Case
+description = Make the first letter of each word in a string upper cased.
+package = Epicodus Examples
+core = 7.x
+files[] = title_case.module
