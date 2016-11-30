@@ -1,0 +1,19 @@
+<?php
+function hello_user_menu() {
+    $item = array();
+    $items['hello_user'] = array(
+        'title' => 'Hello User',
+        'page callback' => 'display_user_confirmation',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+    );
+    return $items;
+}
+
+function display_user_confirmation() {
+    return '<h3>New account confirmed</h3>';
+}
+
+function hello_user_user_insert() {
+    $_GET['destination'] = 'hello_user';
+}

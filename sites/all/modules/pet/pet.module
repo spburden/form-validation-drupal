@@ -1,0 +1,22 @@
+<?php
+function pet_menu() {
+    $items = array();
+    $items['sea_monster'] = array(
+        'title' => 'Meet Sea Monster',
+        'page callback' => 'show_sea_monster',
+        'access callback' => TRUE,
+        'type' => MENU_NORMAL_ITEM,
+    );
+    return $items;
+}
+
+function show_sea_monster() {
+    // $path = drupal_get_path('module', 'pet');
+    // $url = file_create_url($path . '/images/sea_monkey.jpg');
+    return '
+    <h1>Sea Monster</h1>
+    <p>Praesent sed quam ut magna gravida faucibus. Mauris id nulla nec lectus iaculis euismod. Sed lacinia risus at lacus consectetur, dapibus dapibus justo gravida. Donec tristique rutrum libero, id vulputate orci tempor nec. Nam et dui at mi aliquet accumsan. Donec scelerisque nisl urna, quis dictum lectus molestie eu. Aenean convallis justo nec mattis euismod. Quisque elementum odio sit amet ligula porta viverra. Suspendisse vitae tincidunt justo. Nullam nec purus eleifend, hendrerit quam quis, suscipit leo. Nunc viverra, tortor sed facilisis luctus, diam sapien laoreet enim, et sodales urna mauris eget nibh. Proin iaculis pharetra nunc in luctus. Phasellus non accumsan urna. Integer at aliquet sapien, vitae sagittis elit. Pellentesque vitae ligula sit amet augue blandit volutpat vitae eu justo. Aenean auctor nisl sed sem fermentum facilisis.
+    </p>
+    <img src="/sites/all/modules/pet/images/sea_monkey.jpg">
+    ';
+}

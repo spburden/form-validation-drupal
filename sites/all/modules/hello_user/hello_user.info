@@ -1,0 +1,5 @@
+name = Hello User
+description = Display page when new user account is created.
+package = Epicodus Examples
+core = 7.x
+files[] = hello_user.module
