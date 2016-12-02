@@ -29,12 +29,17 @@ function queen_form() {
             '#title' => 'Coordinate for Queen',
             '#type' => 'textfield',
             '#description' => t("Choose the location of the queen."),
+            '#element_validate' => array('element_validate_integer_positive', 'element_validate_range', 'queen_form_validate'),
+            '#required' => TRUE,
     );
 
     $form['victim_position'] = array(
             '#title' => 'Coordinate for victim piece',
             '#type' => 'textfield',
             '#description' => t("Choose the location of the queen's victim."),
+            '#element_validate' => array('element_validate_integer_positive', 'element_validate_range', 'queen_form_validate'),
+            '#required' => TRUE,
+
     );
 
     $form['submit'] = array(
@@ -101,4 +106,16 @@ function queen_success(){
     }
 
     return "<p>$message</p>";
+}
+
+function element_validate_range($element) {
+  if($element['#value'] > 64 || $element['#value'] < 1) {
+    form_error($element, t('You must enter a number between 1 and 64'));
+  }
+}
+
+function queen_form_validate($form, &$form_state) {
+  if ($form_state['values']['queen_position'] === $form_state['values']['victim_position']) {
+    form_set_error('victim_position', 'Queen and victim piece cannot occupy the same space!');
+  }
 }

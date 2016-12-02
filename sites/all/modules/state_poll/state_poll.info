@@ -1,0 +1,5 @@
+name = State Poll
+description = USA State case checker
+package = Epicodus Examples
+core = 7.x
+files[] = state_poll.module, icecream.jpeg

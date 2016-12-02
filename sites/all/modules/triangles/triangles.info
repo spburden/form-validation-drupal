@@ -1,0 +1,5 @@
+name = Triangles
+description = Triangle type identifier
+package = Epicodus Examples
+core = 7.x
+files[] = triangles.module 

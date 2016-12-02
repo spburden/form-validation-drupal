@@ -1,0 +1,79 @@
+<?php
+
+function state_poll_menu() {
+  $items['state_poll'] = array(
+    'title' => 'Favorite Ice Cream',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ice_cream_poll_form'),
+    'access callback' => TRUE,
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items['state_poll_success_page'] = array(
+    'title' => "Success",
+    'page callback' => 'ice_cream_success',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+function ice_cream_poll_form() {
+  $path = drupal_get_path('module', 'state_poll');
+
+  $form['image'] = array(
+    '#markup' => "<img src=" . $path . "/icecream.jpeg height='200'>"
+  );
+
+  $form['flavor'] = array(
+    '#title' => 'What is your favorite flavor of ice cream?',
+    '#type' => 'textfield',
+    '#description' => t('Enter flavor'),
+    '#required' => TRUE,
+  );
+  $form['state'] = array(
+    '#title' => 'State',
+    '#type' => 'textfield',
+    '#description' => t('Enter your State'),
+    '#element_validate' => array('validate_state_format'),
+    '#required' => TRUE,
+  );
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => 'Submit',
+  );
+  return $form;
+}
+
+function validate_state_format($element) {
+  $holder = array();
+  $state = $element['#value'];
+  $split = explode(" ", $state);
+  foreach($split as $word) {
+    $word2 = strtolower($word);
+    array_push($holder, ucfirst($word2));
+  }
+  $count = count($split);
+  $titled_string = implode(" ", $holder);
+  $lowered_string = strtolower($state);
+  if ($count > 2){
+    form_error($element, t('A valid state is 2 words or less!'));
+  } elseif(strlen($state) === 2 && (!(($state === strtoupper($state)) || ($state === strtolower($state))))) {
+    form_error($element, t('A valid state of 2 characters is either all upper or lower case!'));
+  } elseif ((strlen($state) > 2) && (($state !== $titled_string && $state !== $lowered_string)) || ($state === strtoupper($state))){
+    form_error($element, t('State has to be either title case or all lower case!'));
+  }
+}
+
+
+function ice_cream_poll_form_submit($form, &$form_state) {
+  $_SESSION['flavor'] = $form_state['values']['flavor'];
+  $_SESSION['state'] = $form_state['values']['state'];
+  $form_state['redirect'] = 'state_poll_success_page';
+}
+
+function ice_cream_success() {
+  $flavor = $_SESSION['flavor'];
+  $state = $_SESSION['state'];
+  $message = "<p>Thanks for voting for $flavor we have recorded your vote came from $state!";
+  return $message;
+}
